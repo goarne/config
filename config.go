@@ -19,7 +19,7 @@ type ConfigLoader struct {
 //Laster inn applikasjonskonfigurasjon fra en JSON konfigurasjonsfil.
 func (c *ConfigLoader) LoadAppKonfig() {
 	var e error
-	c.fileName = flag.String("config-file", "./appconfig.yaml", "Relative path to application configfile (json)")
+	c.fileName = flag.String("config-file", "", "Relative path to application configfile (json)")
 	flag.Parse()
 
 	if strings.Compare("", *c.fileName) == 0 {
