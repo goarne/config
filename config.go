@@ -1,40 +1,37 @@
 package config
 
 import (
-	"flag"
+	//"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/go-yaml/yaml"
 )
 
 type ConfigLoader struct {
-	fileName      *string
-	ConfigContent interface{}
-	FileContent   []byte
-
-	Unmarshall func([]byte, interface{}) error
+	FileName string
 }
 
 //Laster inn applikasjonskonfigurasjon fra en JSON konfigurasjonsfil.
-func (c *ConfigLoader) LoadAppKonfig() {
+func (c *ConfigLoader) LoadAppKonfig(config interface{}) {
 	var e error
-	c.fileName = flag.String("config-file", "", "Relative path to application configfile (json)")
-	flag.Parse()
+	var fileContent []byte
 
-	if strings.Compare("", *c.fileName) == 0 {
+	if strings.Compare("", c.FileName) == 0 {
 		fmt.Println("Missing config-file.")
 		os.Exit(1)
 	}
 
-	c.FileContent, e = readFile(*c.fileName)
+	fileContent, e = readFile(c.FileName)
 
 	if e != nil {
 		fmt.Println("Missing config-file.")
 		os.Exit(1)
 	}
 
-	e = c.Unmarshall(c.FileContent, &c)
+	e = yaml.Unmarshal(fileContent, config)
 
 	if e != nil {
 		fmt.Println(e)

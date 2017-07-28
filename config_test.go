@@ -5,31 +5,28 @@ import (
 )
 
 var (
-	actualResult string
+	testConfig   AppConfig
 	configLoader ConfigLoader
 )
 
 //Init set up the test structures
 func init() {
-	configLoader = ConfigLoader{}
-
-	configLoader.Unmarshall = func([]byte, interface{}) error {
-		actualResult = string(configLoader.FileContent)
-		return nil
+	configLoader = ConfigLoader{"testfile"}
+	readFile = func(fn string) ([]byte, error) {
+		return []byte("testappname: testapp"), nil
 	}
 
 }
 
 func TestShallLoadConfigSuccessfully(t *testing.T) {
 
-	actualResult = ""
-	readFile = func(fn string) ([]byte, error) {
-		return []byte("test"), nil
-	}
+	configLoader.LoadAppKonfig(&testConfig)
 
-	configLoader.LoadAppKonfig()
-
-	if actualResult != "test" {
-		t.Errorf("Could not load content", actualResult)
+	if testConfig.TestAppName != "testapp" {
+		t.Errorf("Could not load content", testConfig.TestAppName)
 	}
+}
+
+type AppConfig struct {
+	TestAppName string
 }
