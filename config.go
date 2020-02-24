@@ -34,7 +34,7 @@ func (c *ConfigLoader) LoadAppKonfig(config interface{}) {
 	e = yaml.Unmarshal(fileContent, config)
 
 	if e != nil {
-		fmt.Println(e)
+		fmt.Println("Feiler ved lesing av konfigfil:", e)
 		os.Exit(1)
 	}
 }
